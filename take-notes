@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Lets you take notes for specified class
+
+usage() {
+  echo "Usage: $0 -c [ai|ml|db]"
+  exit 1
+}
+
+if [ $# -lt 1 ]; then
+  usage
+  exit 1
+fi
+
+while getopts "c:" _opts; do
+  case $_opts in
+    c ) CLASS=$OPTARG;;
+    * ) echo usage
+	exit 1;;
+  esac
+done
+
+vi ${HOME}/personal/class/${CLASS}/`date +%Y-%m-%d`

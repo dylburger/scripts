@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Encrypts file, adds to git commit
+
+USER=dylan.sather@gmail.com
+
+usage() {
+  echo "Usage: $0 <file> [-n]"
+  echo "Pass the -n option if you DO NOT want to add the file to the next git commit"
+  exit 1
+}
+
+if [ $# -lt 1 ]; then
+  usage
+  exit 1
+fi
+
+while getopts "n" _opts; do
+  case $_opts in
+    n ) export REMOVE_FROM_GIT=1;;
+    * ) echo usage
+	exit 1;;
+  esac
+done
+
+# Encrypt file, add to commit, but keep normal file around, ignoring real file for future commits
+gpg -e -r "$USER" ${1}
+if [[ -n $REMOVE_FROM_GIT ]]; then
+  if [[ -n $PERSONAL_GIT_REPO ]]; then
+    echo "${1}.gpg" >> $PERSONAL_GIT_REPO/.gitignore
+  fi
+else
+  cd $PERSONAL_GIT_REPO
+  git add ${1}.gpg 
+  echo "`dirname ${1}/${1}" >> .gitignore
+fi
