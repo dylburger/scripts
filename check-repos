@@ -36,7 +36,7 @@ for REPO in `find . -name '.git'`; do
     fi
   done
 
-  if [ $count -gt 0 ]; then
+  if [[ $count -gt 0 ]]; then
     read -p "git commit msg: " COMMIT_MSG
     git commit -m "${COMMIT_MSG}"
   else
