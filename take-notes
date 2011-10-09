@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Lets you take notes for specified class
+# Take notes for specified class
 
 usage() {
   echo "Usage: $0 -c [ai|ml|db]"

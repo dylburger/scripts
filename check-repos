@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Script to run through all our local git repos and check for untracked/commited files
+# Supports blacklisting : include the name of the repo (i.e. directory) in .repo-blacklist
+# Dependencies: git
+
+for REPO in `find . -name '.git'`; do
+  # Pull repo "name" from directory structure
+  REPO_NAME=`dirname ${REPO} | awk -F/ '{print $NF}'`
+  grep -q ${REPO_NAME} ${SCRIPT_REPO}/.repo-blacklist
+  # If our repo name is in the blacklist, we skip it (these are mostly read-only repos)
+  if [ $? -eq 0 ]; then
+    continue 
+  fi
+
+  cd `dirname ${REPO}`
+  echo ""
+  cat .git/description
+  echo ""
+
+  # We also have the case in which we have a set of notes, which we should order accordingly
+  # If the order notes script is in our repo, we should kick that off and move on
+  if [ -f order-notes ]; then
+    ./order-notes
+    cd -
+    continue
+  fi
+
+  # Otherwise, we're good to rock and roll
+  for FILE in `git status -s | awk '{print $2}'`; do
+    read -p "Add file ${FILE} to this commit? [y/n]: " COMMIT_ANS
+    echo ${COMMIT_ANS} | egrep -q "^[yY]" 
+    if [ $? -eq 0 ]; then
+      git add ${FILE} 
+      let "count += 1"
+    fi
+  done
+
+  if [ $count -gt 0 ]; then
+    read -p "git commit msg: " COMMIT_MSG
+    git commit -m "${COMMIT_MSG}"
+  else
+    echo "Nothing to commit!"
+  fi
+  cd -
+done
