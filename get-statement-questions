@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Based on convention (!!! = important statement, ??? = important questions), print out our important statements and questions for a given file
+# (To be clear, for each important piece of info, I'm appending !!! OR ??? at the end of a line. This makes it easy to review notes later)
+
+FILE=$1
+
+usage() {
+  echo "$0 file"
+  exit 0
+}
+
+echo "Important notes:"
+grep '!!!' $FILE
+
+echo "Important questions:"
+grep '???' $FILE
+
+exit 0

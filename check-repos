@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/opt/local/bin/bash
 
 # Script to run through all our local git repos and check for untracked/commited files
 # Supports blacklisting : include the name of the repo (i.e. directory) in .repo-blacklist

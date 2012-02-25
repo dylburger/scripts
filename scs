@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# scp files, then ssh to the same host automagically
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH
+
+usage() {
+  echo "Usage: $0 [-r] file1 [... fileN] [user@]host"
+  exit 1
+}
+
+if [ $# -lt 2 ]; then
+  usage
+  exit 1
+fi
+
+SCP_NUM_ARGS=`expr $# - 1`
+HOST=${@: -1}
+
+scp -r ${@:1:$SCP_NUM_ARGS} ${HOST}:
+ssh $HOST

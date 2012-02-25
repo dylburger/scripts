@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/opt/local/bin/bash
 
 # Take notes for specified class
 
