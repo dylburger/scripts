@@ -1,0 +1,7 @@
+# From https://gist.github.com/dergachev/4627207
+
+# Usage
+#
+# mov2gif in.mov out.gif
+
+ffmpeg -i $1 -s 600x400 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > $2
